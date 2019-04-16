@@ -1,5 +1,6 @@
 {
   "env":{
-    "MONGO_ATLAS_PW": "marlepo"
+    "MONGO_ATLAS_PW": "marlepo",
+	"INT_KEY":"secret"
   }
 }
