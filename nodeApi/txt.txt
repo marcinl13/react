@@ -1,0 +1,13 @@
+path = %path%;C:\Program Files\nodejs\
+npm init
+npm install node_modules
+npm install node
+npm install express
+npm install --save-dev nodemon
+package.json scripts-> "start": "nodemon server.js"
+npm start
+npm install --save morgan
+npm install --save body-parser
+npm install --save mongoose
+npm install --save multer
+npm install --save bcrypt
