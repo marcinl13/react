@@ -1,0 +1,7 @@
+{
+  "env":{
+    "MONGO_USER":"marcin",
+    "MONGO_PASS":"marcin",
+    "MONGO_BD":"events"
+  }
+}

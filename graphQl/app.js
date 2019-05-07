@@ -2,9 +2,13 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const graphqlHttp = require('express-graphql')
 const { buildSchema } = require('graphql')
+const mongoose = require('mongoose')
+const Event = require('./models/event')
 
 const app = express()
 app.use(bodyParser.json())
+
+var events = []
 
 app.use(
   '/graphql', graphqlHttp({
@@ -25,11 +29,11 @@ app.use(
         }
 
         type RootQuery {
-          events: [String!]!
+          events: [Event!]!
         }
 
         type RootMutation{
-          createEvent(eventEvent:EventInput):String
+          createEvent(eventInput:EventInput):Event
         }
         
         schema{
@@ -38,19 +42,33 @@ app.use(
         }`
     ),
     rootValue: {
-      events: () => { return ['asd', 'asdasd'] },
+      events: () => { return events },
       createEvent: (args) => {
-        const events = {
-          _id: Math.random().toString(),
-          title: args.title,
-          description: args.description,
-          price: args.price,
-          data: args.data
-        }
+        const event = new Event({
+          title: args.eventInput.title,
+          description: args.eventInput.description,
+          price: args.eventInput.price,
+          data: args.eventInput.data
+        });
+        event.save()
+          .then(result => {
+            console.log(result)
+            return {...result._doc}
+          })
+          .catch(error => { 
+            console.log(error) 
+          })
+
       }
     }, graphiql: true
   })
 )
 
+mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0-agxbj.mongodb.net/test?retryWrites=true`, { useNewUrlParser: true })
+  .then(
+    () => { app.listen(5000) }
+  ).catch((error) => { console.log(error) })
 
-app.listen(5000)
+
+
+
